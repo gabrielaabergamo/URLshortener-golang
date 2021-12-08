@@ -2,24 +2,31 @@ package main
 
 import (
 	"time"
+
+	"github.com/dchest/uniuri"
+	uuid "github.com/satori/go.uuid"
 )
 
+//struct com os dados da URL
 type url struct {
-	id          int
+	id          string
 	processedAt string
 	duration    string
 	shortURL    string
 	originalURL string
 }
 
+//struct teste
 var aux = url{
-	id:          1,
 	shortURL:    "nenhuma",
 	originalURL: "oi",
 }
 
-func Testando(txt string) {
-	aux.shortURL = txt
+//função que encurta a URL
+func URLCurta(txt string) {
+	aux.id = uuid.NewV4().String()
+	aux.originalURL = txt
+	aux.shortURL = "go.io/" + uniuri.NewLen(6)
 	TimeCalc()
 }
 
