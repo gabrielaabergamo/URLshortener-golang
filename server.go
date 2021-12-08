@@ -24,8 +24,11 @@ func main() {
 		fmt.Fprint(res, aux)
 	}).Methods("GET") //retorna URL original
 
-	router.HandleFunc("/x", func(res http.ResponseWriter, req *http.Request) {
-		teste := "teste"
+	router.HandleFunc("/send/{name}", func(res http.ResponseWriter, req *http.Request) {
+		vars := mux.Vars(req)
+		fmt.Fprint(res, vars, vars["name"])
+		//res.WriteHeader(http.StatusOK)
+		teste := vars["name"]
 		Testando(teste)
 	}).Methods("POST") //retorna URL encurtada
 
