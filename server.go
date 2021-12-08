@@ -21,14 +21,12 @@ func main() {
 	}) //ResponseWriter é uma interface e Request é uma struct
 
 	router.HandleFunc("/1", func(res http.ResponseWriter, req *http.Request) {
-		fmt.Fprint(res, "salve")
+		fmt.Fprint(res, aux)
 	}).Methods("GET") //retorna URL original
 
 	router.HandleFunc("/x", func(res http.ResponseWriter, req *http.Request) {
 		teste := "teste"
 		Testando(teste)
-		fmt.Fprint(res, aux)
-
 	}).Methods("POST") //retorna URL encurtada
 
 	log.Fatal(http.ListenAndServe(port, router))
