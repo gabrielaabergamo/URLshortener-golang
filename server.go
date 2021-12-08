@@ -18,8 +18,18 @@ func main() {
 	//registando rota mapeando o path URL para handler
 	router.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
 		fmt.Fprint(res, "Server is Up and Running...")
-	})
-	//ResponseWriter é uma interface e Request é uma struct
+	}) //ResponseWriter é uma interface e Request é uma struct
+
+	router.HandleFunc("/1", func(res http.ResponseWriter, req *http.Request) {
+		fmt.Fprint(res, "salve")
+	}).Methods("GET") //retorna URL original
+
+	router.HandleFunc("/x", func(res http.ResponseWriter, req *http.Request) {
+		teste := "teste"
+		Testando(teste)
+		fmt.Fprint(res, aux)
+
+	}).Methods("POST") //retorna URL encurtada
 
 	log.Fatal(http.ListenAndServe(port, router))
 	//ListenAndServe inicia um server HTTP com um endereço e um handler
