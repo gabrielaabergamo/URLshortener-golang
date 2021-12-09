@@ -27,7 +27,7 @@ func MetodoPost(router *mux.Router) {
 	}).Methods("POST") //retorna URL encurtada
 }
 
-func main() {
+func Servidor() {
 	router := mux.NewRouter()   //instância de mux
 	const port string = ":8000" //port do server
 

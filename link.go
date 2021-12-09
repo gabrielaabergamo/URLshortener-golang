@@ -18,30 +18,32 @@ type Url struct {
 	OriginalURL string
 }
 
+var aux = make([]Url, 10)
+
 //struct teste
-var aux = &Url{
-	ShortURL:    "nenhuma",
-	OriginalURL: "oi",
-}
+// var aux = Url{
+// 	ShortURL:    "nenhuma",
+// 	OriginalURL: "oi",
+// }
 
 //função que encurta a URL
 func URLCurta(txt string) {
-	aux.ID = uuid.NewV4().String()
-	aux.OriginalURL = txt
-	aux.ShortURL = "go.io/" + uniuri.NewLen(6)
+	aux[0].ID = uuid.NewV4().String()
+	aux[0].OriginalURL = txt
+	aux[0].ShortURL = "go.io/" + uniuri.NewLen(6)
 	TimeCalc()
 }
 
 //calcula o dia e horário em que foi processado e a duração
 func TimeCalc() {
 	start := time.Now()
-	aux.ProcessedAt = start.Format("2006-01-02 15:04:05")
-	aux.Duration = time.Since(start).String()
+	aux[0].ProcessedAt = start.Format("2006-01-02 15:04:05")
+	aux[0].Duration = time.Since(start).String()
 }
 
 //transforma a struct em JSON
 func TransfJson() string {
-	auxjson, err := json.Marshal(aux)
+	auxjson, err := json.Marshal(aux[0])
 	if err != nil {
 		fmt.Println("erro", err)
 	}
