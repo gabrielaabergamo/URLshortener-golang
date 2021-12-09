@@ -21,8 +21,10 @@ type Url struct {
 	CodigoSURL  string `json:"-"`
 }
 
+//lista de structs para armazenar dados da URL
 var listaURL = make([]Url, 0)
 
+//função executada no método POST: checamos em listaURL se tal URL já existe e caso contrário a adicionamos
 func URLPost(url string) {
 	//checar se já existe essa URL
 	achou, _ := ChecarURL(url)
@@ -43,12 +45,13 @@ func URLCurta(txt string) Url {
 	aux := Url{}
 	aux.ID = uuid.NewV4().String()
 	aux.OriginalURL = txt
-	aux.CodigoSURL = uniuri.NewLen(6)
+	aux.CodigoSURL = ChecarCodigo()
 	aux.ShortURL = "go.io/" + aux.CodigoSURL
 	listaURL = append(listaURL, aux)
 	return aux
 }
 
+//checa se existe tal URL em listaURL e qual seu índice
 func ChecarURL(url string) (bool, int) {
 	for i, value := range listaURL {
 		match, _ := regexp.MatchString(value.OriginalURL, url)
@@ -59,6 +62,12 @@ func ChecarURL(url string) (bool, int) {
 	return false, -1
 }
 
+//checa se o código gerado é único
+func ChecarCodigo() string {
+	return uniuri.NewLen(6)
+}
+
+//função executada no método GET: checamos em listURL qual struct desejamos retornar
 func URLGet(url string) string {
 	start := time.Now()
 	//fazer busca para achar a struct que queremos
