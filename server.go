@@ -12,8 +12,9 @@ import (
 //https://blog.logrocket.com/making-http-requests-in-go/
 
 func MetodoGet(router *mux.Router) {
-	router.HandleFunc("/retrieve", func(res http.ResponseWriter, req *http.Request) {
-		fmt.Fprint(res, TransfJson())
+	router.HandleFunc("/retrieve/{nameog}", func(res http.ResponseWriter, req *http.Request) {
+		vars := mux.Vars(req)
+		fmt.Fprint(res, URLGet(vars["nameog"]))
 	}).Methods("GET") //retorna URL original
 }
 
@@ -23,7 +24,7 @@ func MetodoPost(router *mux.Router) {
 		fmt.Fprint(res, vars, vars["name"])
 		//res.WriteHeader(http.StatusOK)
 		longURL := vars["name"]
-		URLCurta(longURL)
+		URLPost(longURL)
 	}).Methods("POST") //retorna URL encurtada
 }
 
