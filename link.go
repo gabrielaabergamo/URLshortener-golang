@@ -45,7 +45,13 @@ func URLCurta(txt string) Url {
 	aux := Url{}
 	aux.ID = uuid.NewV4().String()
 	aux.OriginalURL = txt
-	aux.CodigoSURL = ChecarCodigo()
+
+	codigo := uniuri.NewLen(6)
+	for ChecarCodigo(codigo) {
+		codigo = uniuri.NewLen(6)
+	}
+
+	aux.CodigoSURL = codigo
 	aux.ShortURL = "go.io/" + aux.CodigoSURL
 	listaURL = append(listaURL, aux)
 	return aux
@@ -63,8 +69,14 @@ func ChecarURL(url string) (bool, int) {
 }
 
 //checa se o código gerado é único
-func ChecarCodigo() string {
-	return uniuri.NewLen(6)
+func ChecarCodigo(codigo string) bool {
+	for _, value := range listaURL {
+		match, _ := regexp.MatchString(value.CodigoSURL, codigo)
+		if match {
+			return true
+		}
+	}
+	return false
 }
 
 //função executada no método GET: checamos em listURL qual struct desejamos retornar
