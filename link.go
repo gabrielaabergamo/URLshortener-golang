@@ -26,17 +26,19 @@ var listaURL = make([]Url, 0)
 
 //função executada no método POST: checamos em listaURL se tal URL já existe e caso contrário a adicionamos
 func URLPost(url string) string {
+	start := time.Now()
 	//checar se já existe essa URL
 	achou, _ := ChecarURL(url)
 
 	if achou {
-		return "URL já está no banco de dados"
-		// _, matchIndice := ChecarURL(url)
-		// return TransfJson(listaURL[matchIndice])
+		//return "URL já está no banco de dados"
+		_, matchIndice := ChecarURL(url)
+		listaURL[matchIndice].ProcessedAt = start
+		listaURL[matchIndice].Duration = time.Since(start)
+		return TransfJson(listaURL[matchIndice])
 	}
 
 	//caso não exista:
-	start := time.Now()
 	structURL := URLCurta(url)
 	structURL.ProcessedAt = start
 	structURL.Duration = time.Since(start)
@@ -73,6 +75,17 @@ func ChecarURL(url string) (bool, int) {
 	return false, -1
 }
 
+//checa se existe tal URL em listaURL e qual seu índice
+func ChecarURLEncurtada(url string) (bool, int) {
+	for i, value := range listaURL {
+		match, _ := regexp.MatchString(value.CodigoSURL, url)
+		if match {
+			return true, i
+		}
+	}
+	return false, -1
+}
+
 //checa se o código gerado é único
 func ChecarCodigo(codigo string) bool {
 	for _, value := range listaURL {
@@ -88,7 +101,7 @@ func ChecarCodigo(codigo string) bool {
 func URLGet(url string) string {
 	start := time.Now()
 	//fazer busca para achar a struct que queremos
-	_, indiceURL := ChecarURL(url)
+	_, indiceURL := ChecarURLEncurtada(url)
 
 	if indiceURL == -1 {
 		log.Println("deu ruim família")
