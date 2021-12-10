@@ -61,6 +61,7 @@ func Servidor() {
 
 	MetodoPost(router)
 
+	log.Println("servidor up")
 	log.Fatal(http.ListenAndServe(port, router))
 	//ListenAndServe inicia um server HTTP com um endereço e um handler
 }
