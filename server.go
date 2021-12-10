@@ -25,6 +25,7 @@ func verificarCodigo(codigo string) bool {
 func MetodoGet(router *mux.Router) {
 	router.HandleFunc("/retrieve/{nameog}", func(res http.ResponseWriter, req *http.Request) {
 		vars := mux.Vars(req)
+		res.Header().Set("Content-Type", "application/json")
 		verificacao := verificarCodigo(vars["nameog"])
 		if verificacao {
 			fmt.Fprint(res, URLGet(vars["nameog"]))
@@ -38,6 +39,7 @@ func MetodoGet(router *mux.Router) {
 func MetodoPost(router *mux.Router) {
 	router.HandleFunc("/send/{name}", func(res http.ResponseWriter, req *http.Request) {
 		vars := mux.Vars(req)
+		res.Header().Set("Content-Type", "application/json")
 		//fmt.Fprint(res, vars, vars["name"])
 		//res.WriteHeader(http.StatusOK)
 		longURL := vars["name"]
