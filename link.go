@@ -91,6 +91,7 @@ func URLGet(url string) string {
 
 	if indiceURL == -1 {
 		log.Println("deu ruim família")
+		return "URL não existe no banco de dados"
 	}
 
 	listaURL[indiceURL].ProcessedAt = start
