@@ -17,10 +17,21 @@ func verificarURL(url string) bool {
 	return match
 }
 
+func verificarCodigo(codigo string) bool {
+	match, _ := regexp.MatchString("^[a-zA-Z0-9]{6,6}$", codigo)
+	return match
+}
+
 func MetodoGet(router *mux.Router) {
 	router.HandleFunc("/retrieve/{nameog}", func(res http.ResponseWriter, req *http.Request) {
 		vars := mux.Vars(req)
-		fmt.Fprint(res, URLGet(vars["nameog"]))
+		verificacao := verificarCodigo(vars["nameog"])
+		if verificacao {
+			fmt.Fprint(res, URLGet(vars["nameog"]))
+		} else {
+			fmt.Fprint(res, "Código inválido")
+		}
+
 	}).Methods("GET") //retorna URL original
 }
 
