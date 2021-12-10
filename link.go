@@ -25,7 +25,7 @@ type Url struct {
 var listaURL = make([]Url, 0)
 
 //função executada no método POST: checamos em listaURL se tal URL já existe e caso contrário a adicionamos
-func URLPost(url string) {
+func URLPost(url string) string {
 	//checar se já existe essa URL
 	achou, _ := ChecarURL(url)
 
@@ -37,7 +37,11 @@ func URLPost(url string) {
 		structURL.Duration = time.Since(start)
 		log.Println("nao existe")
 		printslice()
+		return TransfJson(structURL)
 	}
+
+	_, matchIndice := ChecarURL(url)
+	return TransfJson(listaURL[matchIndice])
 }
 
 //função que encurta a URL

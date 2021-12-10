@@ -21,10 +21,11 @@ func MetodoGet(router *mux.Router) {
 func MetodoPost(router *mux.Router) {
 	router.HandleFunc("/send/{name}", func(res http.ResponseWriter, req *http.Request) {
 		vars := mux.Vars(req)
-		fmt.Fprint(res, vars, vars["name"])
+		//fmt.Fprint(res, vars, vars["name"])
 		//res.WriteHeader(http.StatusOK)
 		longURL := vars["name"]
-		URLPost(longURL)
+		fmt.Fprint(res, URLPost(longURL))
+		//URLPost(longURL)
 	}).Methods("POST") //retorna URL encurtada
 }
 
