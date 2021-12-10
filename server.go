@@ -4,12 +4,18 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"regexp"
 
 	"github.com/gorilla/mux"
 )
 
 //https://ichi.pro/pt/sua-primeira-api-rest-em-golang-com-mux-202836347743488
 //https://blog.logrocket.com/making-http-requests-in-go/
+
+func verificarURL(url string) bool {
+	match, _ := regexp.MatchString("[(http(s)?):\\//\\//(www\\.)?a-zA-Z0-9\\+]{2,256}\\.[a-z]{2,6}", url)
+	return match
+}
 
 func MetodoGet(router *mux.Router) {
 	router.HandleFunc("/retrieve/{nameog}", func(res http.ResponseWriter, req *http.Request) {
@@ -24,7 +30,12 @@ func MetodoPost(router *mux.Router) {
 		//fmt.Fprint(res, vars, vars["name"])
 		//res.WriteHeader(http.StatusOK)
 		longURL := vars["name"]
-		fmt.Fprint(res, URLPost(longURL))
+		verificacao := verificarURL(longURL)
+		if verificacao {
+			fmt.Fprint(res, URLPost(longURL))
+		} else {
+			fmt.Fprint(res, "URL inválida")
+		}
 		//URLPost(longURL)
 	}).Methods("POST") //retorna URL encurtada
 }
