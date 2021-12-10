@@ -29,19 +29,20 @@ func URLPost(url string) string {
 	//checar se já existe essa URL
 	achou, _ := ChecarURL(url)
 
-	if !achou {
-		//caso não exista:
-		start := time.Now()
-		structURL := URLCurta(url)
-		structURL.ProcessedAt = start
-		structURL.Duration = time.Since(start)
-		log.Println("nao existe")
-		printslice()
-		return TransfJson(structURL)
+	if achou {
+		return "URL já está no banco de dados"
+		// _, matchIndice := ChecarURL(url)
+		// return TransfJson(listaURL[matchIndice])
 	}
 
-	_, matchIndice := ChecarURL(url)
-	return TransfJson(listaURL[matchIndice])
+	//caso não exista:
+	start := time.Now()
+	structURL := URLCurta(url)
+	structURL.ProcessedAt = start
+	structURL.Duration = time.Since(start)
+	log.Println("nao existe")
+	printslice()
+	return TransfJson(structURL)
 }
 
 //função que encurta a URL
