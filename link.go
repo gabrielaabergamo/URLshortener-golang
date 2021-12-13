@@ -26,7 +26,7 @@ var listaURL = make([]Url, 0)
 
 //função executada no método POST: checamos em listaURL se tal URL já existe e caso contrário a adicionamos
 func URLPost(url string) string {
-	chamada()
+	// inserirURL()
 	start := time.Now()
 	//checar se já existe essa URL
 	achou, _ := ChecarURL(url)
@@ -45,6 +45,7 @@ func URLPost(url string) string {
 	structURL.Duration = time.Since(start)
 	log.Println("nao existe")
 	printslice()
+	chamada(structURL.ID, structURL.OriginalURL, structURL.ShortURL, structURL.CodigoSURL) //add no bd
 	return TransfJson(structURL)
 }
 
@@ -57,7 +58,7 @@ func URLCurta(txt string) Url {
 	codigo := uniuri.NewLen(6)
 	for ChecarCodigo(codigo) {
 		codigo = uniuri.NewLen(6)
-	}
+	} //fica no slice ou bd? >bd
 
 	aux.CodigoSURL = codigo
 	aux.ShortURL = "go.io/" + aux.CodigoSURL
