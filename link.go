@@ -26,6 +26,7 @@ var listaURL = make([]Url, 0)
 
 //função executada no método POST: checamos em listaURL se tal URL já existe e caso contrário a adicionamos
 func URLPost(url string) string {
+	chamada()
 	start := time.Now()
 	//checar se já existe essa URL
 	achou, _ := ChecarURL(url)
