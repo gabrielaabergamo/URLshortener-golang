@@ -71,6 +71,20 @@ func buscarURL(id string) Url {
 	return u
 }
 
+//retorna um slice com todos os códigos de urls que estão salvas
+func verificarCodigoBD() []string {
+	//buscar códigos no bd
+	rows, _ := db.Query("select url_short_sufix from urls")
+	defer rows.Close()
+	lista := make([]string, 0)
+	for rows.Next() {
+		aux := ""
+		rows.Scan(aux)
+		lista = append(lista, aux)
+	}
+	return lista
+}
+
 // func chamada(id, OriginalURL, ShortURL, CodigoSURL string) {
 // 	// getEnvVars()
 // 	// username := os.Getenv("USERNAME")

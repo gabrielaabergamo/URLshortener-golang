@@ -30,24 +30,24 @@ func URLPost(url string) string {
 	start := time.Now()
 
 	//checar se já existe essa URL
-	achou, _ := ChecarURL(url) //substituir por uma consulta no bd
+	//achou, _ := ChecarURL(url) //substituir por uma consulta no bd
 
-	if achou {
-		//return "URL já está no banco de dados"
-		_, matchIndice := ChecarURL(url)
-		listaURL[matchIndice].ProcessedAt = start
-		listaURL[matchIndice].Duration = time.Since(start)
-		return TransfJson(listaURL[matchIndice])
-	}
+	// if achou {
+	// 	//return "URL já está no banco de dados"
+	// 	_, matchIndice := ChecarURL(url)
+	// 	listaURL[matchIndice].ProcessedAt = start
+	// 	listaURL[matchIndice].Duration = time.Since(start)
+	// 	return TransfJson(listaURL[matchIndice])
+	// }
 
 	//caso não exista:
 	// structURL := URLCurta(url)
 	// structURL.ProcessedAt = start
 	// structURL.Duration = time.Since(start)
-	log.Println("nao existe")
+
+	//log.Println("nao existe")
 	ID, OriginalURL, ShortURL, CodigoSURL := URLCurta(url)
 	aux := inserirURL(ID, OriginalURL, ShortURL, CodigoSURL) //add no bd
-	//aux := buscarURL(structURL.ID)
 	aux.ProcessedAt = start
 	aux.Duration = time.Since(start)
 	return TransfJson(aux)
@@ -73,9 +73,10 @@ func URLCurta(txt string) (string, string, string, string) {
 	OriginalURL := txt
 
 	codigo := uniuri.NewLen(6)
-	// for ChecarCodigo(codigo) {
-	// 	codigo = uniuri.NewLen(6)
-	// } //fica no slice ou bd? >bd
+	lista := verificarCodigoBD()
+	for ChecarCodigo(codigo, lista) {
+		codigo = uniuri.NewLen(6)
+	}
 
 	CodigoSURL := codigo
 	ShortURL := "go.io/" + CodigoSURL
@@ -83,16 +84,17 @@ func URLCurta(txt string) (string, string, string, string) {
 	return ID, OriginalURL, ShortURL, CodigoSURL
 }
 
+//NAO PRECISAMOS MAIS DESSA FUNC
 //checa se existe tal URL em listaURL e qual seu índice
-func ChecarURL(url string) (bool, int) {
-	for i, value := range listaURL {
-		match, _ := regexp.MatchString(value.OriginalURL, url)
-		if match {
-			return true, i
-		}
-	}
-	return false, -1
-}
+// func ChecarURL(url string) (bool, int) {
+// 	for i, value := range listaURL {
+// 		match, _ := regexp.MatchString(value.OriginalURL, url)
+// 		if match {
+// 			return true, i
+// 		}
+// 	}
+// 	return false, -1
+// }
 
 //checa se existe tal URL em listaURL e qual seu índice
 func ChecarURLEncurtada(url string) (bool, int) {
@@ -105,10 +107,21 @@ func ChecarURLEncurtada(url string) (bool, int) {
 	return false, -1
 }
 
+// //checa se o código gerado é único
+// func ChecarCodigo(codigo string) bool {
+// 	for _, value := range listaURL {
+// 		match, _ := regexp.MatchString(value.CodigoSURL, codigo)
+// 		if match {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
+
 //checa se o código gerado é único
-func ChecarCodigo(codigo string) bool {
-	for _, value := range listaURL {
-		match, _ := regexp.MatchString(value.CodigoSURL, codigo)
+func ChecarCodigo(codigo string, lista []string) bool {
+	for _, value := range lista {
+		match, _ := regexp.MatchString(value, codigo)
 		if match {
 			return true
 		}
