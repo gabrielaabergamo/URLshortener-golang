@@ -41,30 +41,46 @@ func URLPost(url string) string {
 	}
 
 	//caso não exista:
-	structURL := URLCurta(url)
-	structURL.ProcessedAt = start
-	structURL.Duration = time.Since(start)
+	// structURL := URLCurta(url)
+	// structURL.ProcessedAt = start
+	// structURL.Duration = time.Since(start)
 	log.Println("nao existe")
-	printslice()
-	chamada(structURL.ID, structURL.OriginalURL, structURL.ShortURL, structURL.CodigoSURL) //add no bd
-	return TransfJson(structURL)
+	ID, OriginalURL, ShortURL, CodigoSURL := URLCurta(url)
+	aux := inserirURL(ID, OriginalURL, ShortURL, CodigoSURL) //add no bd
+	//aux := buscarURL(structURL.ID)
+	aux.ProcessedAt = start
+	aux.Duration = time.Since(start)
+	return TransfJson(aux)
+	//return TransfJson(structURL)
 }
 
 //função que encurta a URL
-func URLCurta(txt string) Url {
-	aux := Url{}
-	aux.ID = uuid.NewV4().String()
-	aux.OriginalURL = txt
+func URLCurta(txt string) (string, string, string, string) {
+	// aux := Url{}
+	// aux.ID = uuid.NewV4().String()
+	// aux.OriginalURL = txt
+
+	// codigo := uniuri.NewLen(6)
+	// for ChecarCodigo(codigo) {
+	// 	codigo = uniuri.NewLen(6)
+	// } //fica no slice ou bd? >bd
+
+	// aux.CodigoSURL = codigo
+	// aux.ShortURL = "go.io/" + aux.CodigoSURL
+	// listaURL = append(listaURL, aux)
+	// return aux
+	ID := uuid.NewV4().String()
+	OriginalURL := txt
 
 	codigo := uniuri.NewLen(6)
-	for ChecarCodigo(codigo) {
-		codigo = uniuri.NewLen(6)
-	} //fica no slice ou bd? >bd
+	// for ChecarCodigo(codigo) {
+	// 	codigo = uniuri.NewLen(6)
+	// } //fica no slice ou bd? >bd
 
-	aux.CodigoSURL = codigo
-	aux.ShortURL = "go.io/" + aux.CodigoSURL
-	listaURL = append(listaURL, aux)
-	return aux
+	CodigoSURL := codigo
+	ShortURL := "go.io/" + CodigoSURL
+	//listaURL = append(listaURL, aux)
+	return ID, OriginalURL, ShortURL, CodigoSURL
 }
 
 //checa se existe tal URL em listaURL e qual seu índice
@@ -127,8 +143,8 @@ func TransfJson(aux Url) string {
 }
 
 //teste para checar se os dados estão sendo salvos corretamente
-func printslice() {
-	for _, i := range listaURL {
-		log.Println(i)
-	}
-}
+// func printslice() {
+// 	for _, i := range listaURL {
+// 		log.Println(i)
+// 	}
+// }
