@@ -28,8 +28,9 @@ var listaURL = make([]Url, 0)
 func URLPost(url string) string {
 	// inserirURL()
 	start := time.Now()
+
 	//checar se já existe essa URL
-	achou, _ := ChecarURL(url)
+	achou, _ := ChecarURL(url) //substituir por uma consulta no bd
 
 	if achou {
 		//return "URL já está no banco de dados"
