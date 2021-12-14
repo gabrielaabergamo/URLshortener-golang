@@ -29,6 +29,9 @@ func URLPost(url string) string {
 	// inserirURL()
 	start := time.Now()
 
+	// achou := buscarURL(url)
+	// log.Println(achou)
+
 	//checar se já existe essa URL
 	//achou, _ := ChecarURL(url) //substituir por uma consulta no bd
 

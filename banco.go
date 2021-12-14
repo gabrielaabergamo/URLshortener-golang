@@ -56,12 +56,12 @@ func inserirURL(id, OriginalURL, ShortURL, CodigoSURL string) Url {
 	stmt := `INSERT INTO urls(id, url_original, url_short, url_short_sufix) VALUES (?, ?, ?, ?)`
 	res, _ := db.Exec(stmt, id, OriginalURL, ShortURL, CodigoSURL)
 	log.Println(res)
-	return buscarURL(id)
+	return buscarURL(OriginalURL)
 }
 
-func buscarURL(id string) Url {
+func buscarURL(OriginalURL string) Url {
 	//buscar por url no banco
-	rows, _ := db.Query("select id, url_original, url_short, url_short_sufix from urls where id = ?", id)
+	rows, _ := db.Query("select id, url_original, url_short, url_short_sufix from urls where url_original = ?", OriginalURL)
 	//Query executes a query that returns rows, typically a SELECT.
 	defer rows.Close()
 	var u Url
