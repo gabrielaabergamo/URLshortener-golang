@@ -21,109 +21,43 @@ type Url struct {
 	CodigoSURL  string `json:"-"`
 }
 
-//lista de structs para armazenar dados da URL
-var listaURL = make([]Url, 0)
-
-//função executada no método POST: checamos em listaURL se tal URL já existe e caso contrário a adicionamos
+//função executada no método POST: checamos no banco de dados se tal URL já existe e caso contrário a adicionamos
 func URLPost(url string) string {
-	// inserirURL()
 	start := time.Now()
 
-	achou := buscarURL(url)
+	achou := buscarURL(url) //busca no bd
+
+	//caso url já tenha sido inserida
 	if achou.ID != "" {
 		achou.ProcessedAt = start
 		achou.Duration = time.Since(start)
 		return TransfJson(achou)
 	}
 
-	//checar se já existe essa URL
-	//achou, _ := ChecarURL(url) //substituir por uma consulta no bd
-
-	// if achou {
-	// 	//return "URL já está no banco de dados"
-	// 	_, matchIndice := ChecarURL(url)
-	// 	listaURL[matchIndice].ProcessedAt = start
-	// 	listaURL[matchIndice].Duration = time.Since(start)
-	// 	return TransfJson(listaURL[matchIndice])
-	// }
-
-	//caso não exista:
-	// structURL := URLCurta(url)
-	// structURL.ProcessedAt = start
-	// structURL.Duration = time.Since(start)
-
-	//log.Println("nao existe")
+	//caso não tenha sido inserida ainda
 	ID, OriginalURL, ShortURL, CodigoSURL := URLCurta(url)
 	aux := inserirURL(ID, OriginalURL, ShortURL, CodigoSURL) //add no bd
 	aux.ProcessedAt = start
 	aux.Duration = time.Since(start)
 	return TransfJson(aux)
-	//return TransfJson(structURL)
 }
 
 //função que encurta a URL
 func URLCurta(txt string) (string, string, string, string) {
-	// aux := Url{}
-	// aux.ID = uuid.NewV4().String()
-	// aux.OriginalURL = txt
+	ID := uuid.NewV4().String() //gerar ID único
 
-	// codigo := uniuri.NewLen(6)
-	// for ChecarCodigo(codigo) {
-	// 	codigo = uniuri.NewLen(6)
-	// } //fica no slice ou bd? >bd
-
-	// aux.CodigoSURL = codigo
-	// aux.ShortURL = "go.io/" + aux.CodigoSURL
-	// listaURL = append(listaURL, aux)
-	// return aux
-	ID := uuid.NewV4().String()
 	OriginalURL := txt
 
-	codigo := uniuri.NewLen(6)
+	CodigoSURL := uniuri.NewLen(6) //gerar código da URL encurtada único
 	lista := verificarCodigoBD()
-	for ChecarCodigo(codigo, lista) {
-		codigo = uniuri.NewLen(6)
+	for ChecarCodigo(CodigoSURL, lista) {
+		CodigoSURL = uniuri.NewLen(6)
 	}
 
-	CodigoSURL := codigo
 	ShortURL := "go.io/" + CodigoSURL
-	//listaURL = append(listaURL, aux)
+
 	return ID, OriginalURL, ShortURL, CodigoSURL
 }
-
-//NAO PRECISAMOS MAIS DESSA FUNC
-//checa se existe tal URL em listaURL e qual seu índice
-// func ChecarURL(url string) (bool, int) {
-// 	for i, value := range listaURL {
-// 		match, _ := regexp.MatchString(value.OriginalURL, url)
-// 		if match {
-// 			return true, i
-// 		}
-// 	}
-// 	return false, -1
-// }
-
-//checa se existe tal URL em listaURL e qual seu índice
-func ChecarURLEncurtada(url string) (bool, int) {
-	for i, value := range listaURL {
-		match, _ := regexp.MatchString(value.CodigoSURL, url)
-		if match {
-			return true, i
-		}
-	}
-	return false, -1
-}
-
-// //checa se o código gerado é único
-// func ChecarCodigo(codigo string) bool {
-// 	for _, value := range listaURL {
-// 		match, _ := regexp.MatchString(value.CodigoSURL, codigo)
-// 		if match {
-// 			return true
-// 		}
-// 	}
-// 	return false
-// }
 
 //checa se o código gerado é único
 func ChecarCodigo(codigo string, lista []string) bool {
@@ -139,11 +73,11 @@ func ChecarCodigo(codigo string, lista []string) bool {
 //função executada no método GET: checamos em listURL qual struct desejamos retornar
 func URLGet(url string) string {
 	start := time.Now()
-	//fazer busca para achar a struct que queremos
-	//_, indiceURL := ChecarURLEncurtada(url)
 
+	//utilizando o código da url encurtada é feita a busca pelos dados da url
 	achou := buscarURLCurta(url)
 
+	//caso não exista tal url no banco
 	if achou.ID == "" {
 		log.Println("deu ruim família")
 		return "URL não existe no banco de dados"
@@ -160,13 +94,5 @@ func TransfJson(aux Url) string {
 	if err != nil {
 		fmt.Println("erro", err)
 	}
-	//printslice()
 	return string(auxjson)
 }
-
-//teste para checar se os dados estão sendo salvos corretamente
-// func printslice() {
-// 	for _, i := range listaURL {
-// 		log.Println(i)
-// 	}
-// }

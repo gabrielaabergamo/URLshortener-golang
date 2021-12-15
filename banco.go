@@ -51,14 +51,15 @@ func inicializaBD() {
 		)`)
 }
 
+//adicionar URL no banco de dados
 func inserirURL(id, OriginalURL, ShortURL, CodigoSURL string) Url {
-	//adicionar url no banco
 	stmt := `INSERT INTO urls(id, url_original, url_short, url_short_sufix) VALUES (?, ?, ?, ?)`
 	res, _ := db.Exec(stmt, id, OriginalURL, ShortURL, CodigoSURL)
 	log.Println(res)
 	return buscarURL(OriginalURL)
 }
 
+//buscar por URL a partir de seu link original
 func buscarURL(OriginalURL string) Url {
 	//buscar por url no banco
 	rows, _ := db.Query("select id, url_original, url_short, url_short_sufix from urls where url_original = ?", OriginalURL)
@@ -71,6 +72,7 @@ func buscarURL(OriginalURL string) Url {
 	return u
 }
 
+//buscar por URL encurtada a partir de seu código
 func buscarURLCurta(CodigoSURL string) Url {
 	//buscar por url no banco
 	rows, _ := db.Query("select id, url_original, url_short, url_short_sufix from urls where url_short_sufix = ?", CodigoSURL)
@@ -96,45 +98,3 @@ func verificarCodigoBD() []string {
 	}
 	return lista
 }
-
-// func chamada(id, OriginalURL, ShortURL, CodigoSURL string) {
-// 	// getEnvVars()
-// 	// username := os.Getenv("USERNAME")
-// 	// password := os.Getenv("PASSWORD")
-// 	// //abrir banco
-// 	// db, err := sql.Open("mysql", username+":"+password+"@/")
-// 	// if err != nil {
-// 	// 	panic(err)
-// 	// }
-// 	// //fechar banco
-// 	// defer db.Close() //defer: is used to ensure that a function call is performed later in a program's execution
-// 	// exec(db, "create database if not exists urlshortener")
-// 	// exec(db, "use urlshortener")
-// 	// exec(db, "drop table if exists urls")
-// 	// exec(db, `create table urls (
-// 	// 	id varchar(80),
-// 	// 	url_original varchar(80) UNIQUE,
-// 	// 	url_short varchar(80) UNIQUE,
-// 	// 	url_short_sufix varchar(80) UNIQUE,
-// 	// 	PRIMARY KEY (id)
-// 	// 	)`)
-
-// 	// stmt, _ := db.Prepare("insert into urls(id, url_original, url_short, url_short_sufix) values(?)")
-// 	// stmt.Exec("teste", "teste", "teste", "teste")
-
-// 	// //adicionar url no banco
-// 	// stmt := `INSERT INTO urls(id, url_original, url_short, url_short_sufix) VALUES (?, ?, ?, ?)`
-// 	// res, _ := db.Exec(stmt, id, OriginalURL, ShortURL, CodigoSURL)
-// 	// log.Println(res)
-
-// 	//buscar por url no banco
-// 	// rows, _ := db.Query("select id, url_original, url_short, url_short_sufix from urls where id = ?", id)
-// 	// //Query executes a query that returns rows, typically a SELECT.
-// 	// defer rows.Close()
-
-// 	// for rows.Next() {
-// 	// 	var u Urlteste
-// 	// 	rows.Scan(&u.ID, &u.OriginalURL, &u.ShortURL, &u.CodigoSURL)
-// 	// 	log.Println(u)
-// 	// }
-// }
