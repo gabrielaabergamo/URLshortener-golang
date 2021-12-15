@@ -93,8 +93,9 @@ func verificarCodigoBD() []string {
 	lista := make([]string, 0)
 	for rows.Next() {
 		aux := ""
-		rows.Scan(aux)
+		rows.Scan(&aux)
 		lista = append(lista, aux)
 	}
+
 	return lista
 }
