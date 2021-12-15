@@ -140,16 +140,18 @@ func ChecarCodigo(codigo string, lista []string) bool {
 func URLGet(url string) string {
 	start := time.Now()
 	//fazer busca para achar a struct que queremos
-	_, indiceURL := ChecarURLEncurtada(url)
+	//_, indiceURL := ChecarURLEncurtada(url)
 
-	if indiceURL == -1 {
+	achou := buscarURLCurta(url)
+
+	if achou.ID == "" {
 		log.Println("deu ruim família")
 		return "URL não existe no banco de dados"
 	}
 
-	listaURL[indiceURL].ProcessedAt = start
-	listaURL[indiceURL].Duration = time.Since(start)
-	return TransfJson(listaURL[indiceURL])
+	achou.ProcessedAt = start
+	achou.Duration = time.Since(start)
+	return TransfJson(achou)
 }
 
 //transforma a struct em JSON

@@ -71,6 +71,18 @@ func buscarURL(OriginalURL string) Url {
 	return u
 }
 
+func buscarURLCurta(CodigoSURL string) Url {
+	//buscar por url no banco
+	rows, _ := db.Query("select id, url_original, url_short, url_short_sufix from urls where url_short_sufix = ?", CodigoSURL)
+	//Query executes a query that returns rows, typically a SELECT.
+	defer rows.Close()
+	var u Url
+	for rows.Next() {
+		rows.Scan(&u.ID, &u.OriginalURL, &u.ShortURL, &u.CodigoSURL)
+	}
+	return u
+}
+
 //retorna um slice com todos os códigos de urls que estão salvas
 func verificarCodigoBD() []string {
 	//buscar códigos no bd
