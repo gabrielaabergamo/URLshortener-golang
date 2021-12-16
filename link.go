@@ -25,18 +25,21 @@ type Url struct {
 func URLPost(url string) string {
 	start := time.Now()
 
-	achou := buscarURL(url) //busca no bd
+	// achou := buscarURL(url) //busca no bd
 
-	//caso url já tenha sido inserida
-	if achou.ID != "" {
-		achou.ProcessedAt = start
-		achou.Duration = time.Since(start)
-		return TransfJson(achou)
-	}
+	// //caso url já tenha sido inserida
+	// if achou.ID != "" {
+	// 	achou.ProcessedAt = start
+	// 	achou.Duration = time.Since(start)
+	// 	return TransfJson(achou)
+	// }
 
 	//caso não tenha sido inserida ainda
 	ID, OriginalURL, ShortURL, CodigoSURL := URLCurta(url)
-	aux := inserirURL(ID, OriginalURL, ShortURL, CodigoSURL) //add no bd
+	aux, err := inserirURL(ID, OriginalURL, ShortURL, CodigoSURL) //add no bd
+	if err != nil {
+		aux = buscarURL(url)
+	}
 	aux.ProcessedAt = start
 	aux.Duration = time.Since(start)
 	return TransfJson(aux)

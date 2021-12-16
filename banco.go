@@ -52,11 +52,15 @@ func inicializaBD() {
 }
 
 //adicionar URL no banco de dados
-func inserirURL(id, OriginalURL, ShortURL, CodigoSURL string) Url {
+func inserirURL(id, OriginalURL, ShortURL, CodigoSURL string) (Url, error) {
 	stmt := `INSERT INTO urls(id, url_original, url_short, url_short_sufix) VALUES (?, ?, ?, ?)`
-	res, _ := db.Exec(stmt, id, OriginalURL, ShortURL, CodigoSURL)
-	log.Println(res)
-	return buscarURL(OriginalURL)
+	_, err := db.Exec(stmt, id, OriginalURL, ShortURL, CodigoSURL)
+	if err != nil {
+		aux := Url{}
+		return aux, err
+	}
+
+	return buscarURL(OriginalURL), nil
 }
 
 //buscar por URL a partir de seu link original
