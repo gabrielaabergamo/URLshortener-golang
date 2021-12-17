@@ -38,7 +38,13 @@ func URLPost(url string) string {
 	ID, OriginalURL, ShortURL, CodigoSURL := URLCurta(url)
 	aux, err := inserirURL(ID, OriginalURL, ShortURL, CodigoSURL) //add no bd
 	if err != nil {
-		aux = buscarURL(url)
+		match, _ := regexp.MatchString("Error 1062", err.Error())
+		if match {
+			aux = buscarURL(url)
+		} else {
+			return "erro desconhecido"
+		}
+
 	}
 	aux.ProcessedAt = start
 	aux.Duration = time.Since(start)
@@ -57,7 +63,7 @@ func URLCurta(txt string) (string, string, string, string) {
 		CodigoSURL = uniuri.NewLen(6)
 	}
 
-	ShortURL := "go.io/" + CodigoSURL
+	ShortURL := "http://go.io/" + CodigoSURL
 
 	return ID, OriginalURL, ShortURL, CodigoSURL
 }
