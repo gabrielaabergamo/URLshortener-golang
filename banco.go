@@ -55,6 +55,7 @@ func inicializaBD() {
 func inserirURL(id, OriginalURL, ShortURL, CodigoSURL string) (Url, error) {
 	stmt := `INSERT INTO urls(id, url_original, url_short, url_short_sufix) VALUES (?, ?, ?, ?)`
 	_, err := db.Exec(stmt, id, OriginalURL, ShortURL, CodigoSURL)
+
 	if err != nil {
 		aux := Url{}
 		return aux, err
@@ -90,16 +91,23 @@ func buscarURLCurta(CodigoSURL string) Url {
 }
 
 //retorna um slice com todos os códigos de urls que estão salvas
-func verificarCodigoBD() []string {
+func verificarCodigoBD(codigo string) string {
 	//buscar códigos no bd
-	rows, _ := db.Query("select url_short_sufix from urls")
-	defer rows.Close()
-	lista := make([]string, 0)
-	for rows.Next() {
-		aux := ""
-		rows.Scan(&aux)
-		lista = append(lista, aux)
-	}
+	// rows, _ := db.Query("select url_short_sufix from urls")
+	// defer rows.Close()
+	// lista := make([]string, 0)
+	// for rows.Next() {
+	// 	aux := ""
+	// 	rows.Scan(&aux)
+	// 	lista = append(lista, aux)
+	// }
 
-	return lista
+	// return lista
+	rows, _ := db.Query("select url_short_sufix from urls where url_short_sufix= ?", codigo)
+	defer rows.Close()
+	aux := ""
+	for rows.Next() {
+		rows.Scan(&aux)
+	}
+	return aux
 }

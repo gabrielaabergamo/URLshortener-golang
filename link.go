@@ -58,25 +58,15 @@ func URLCurta(txt string) (string, string, string, string) {
 	OriginalURL := txt
 
 	CodigoSURL := uniuri.NewLen(6) //gerar código da URL encurtada único
-	lista := verificarCodigoBD()
-	for ChecarCodigo(CodigoSURL, lista) {
+	verificacao := verificarCodigoBD(CodigoSURL)
+	for len(verificacao) > 0 {
 		CodigoSURL = uniuri.NewLen(6)
+		verificacao = verificarCodigoBD(CodigoSURL)
 	}
 
 	ShortURL := "http://go.io/" + CodigoSURL
 
 	return ID, OriginalURL, ShortURL, CodigoSURL
-}
-
-//checa se o código gerado é único
-func ChecarCodigo(codigo string, lista []string) bool {
-	for _, value := range lista {
-		match, _ := regexp.MatchString(value, codigo)
-		if match {
-			return true
-		}
-	}
-	return false
 }
 
 //função executada no método GET: checamos em listURL qual struct desejamos retornar
