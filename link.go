@@ -73,7 +73,7 @@ func URLCurta(txt string) (string, string, string, string) {
 func URLGet(url string) string {
 	start := time.Now()
 
-	//utilizando o código da url encurtada é feita a busca pelos dados da url
+	//utilizando a url encurtada para fazer a busca pelos dados da url
 	achou := buscarURLCurta(url)
 
 	//caso não exista tal url no banco

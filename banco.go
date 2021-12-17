@@ -78,15 +78,16 @@ func buscarURL(OriginalURL string) Url {
 }
 
 //buscar por URL encurtada a partir de seu código
-func buscarURLCurta(CodigoSURL string) Url {
+func buscarURLCurta(ShortURL string) Url {
 	//buscar por url no banco
-	rows, _ := db.Query("select id, url_original, url_short, url_short_sufix from urls where url_short_sufix = ?", CodigoSURL)
+	rows, _ := db.Query("select id, url_original, url_short, url_short_sufix from urls where url_short = ?", ShortURL)
 	//Query executes a query that returns rows, typically a SELECT.
 	defer rows.Close()
 	var u Url
 	for rows.Next() {
 		rows.Scan(&u.ID, &u.OriginalURL, &u.ShortURL, &u.CodigoSURL)
 	}
+	log.Println(u)
 	return u
 }
 

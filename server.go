@@ -18,8 +18,9 @@ func verificarURL(url string) bool {
 }
 
 func verificarCodigo(codigo string) bool {
-	match, _ := regexp.MatchString("^[a-zA-Z0-9]{6,6}$", codigo)
-	return match
+	//match, _ := regexp.MatchString("^[a-zA-Z0-9]{6,6}$", codigo)
+	//return match
+	return true
 }
 
 func MetodoGet(router *mux.Router) {
