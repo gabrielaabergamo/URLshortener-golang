@@ -1,6 +1,6 @@
 # URLshortener-golang
 
-"Encurtador" de URLs em golang: uma string ```https://go.io/xxxxxx``` é gerada a partir de uma URL. O código ```xxxxxx``` é alfanumérico e único.
+"Encurtador" de URLs em golang: uma string ```http://go.io/xxxxxx``` é gerada a partir de uma URL. O código ```xxxxxx``` é alfanumérico e único.
 
 # POST
 > localhost:8000/send/?url=**URL**
