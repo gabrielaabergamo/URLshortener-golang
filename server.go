@@ -23,7 +23,7 @@ func verificarCodigo(codigo string) bool {
 }
 
 func MetodoGet(router *mux.Router) {
-	router.HandleFunc("/retrieve/{nameog}", func(res http.ResponseWriter, req *http.Request) {
+	router.HandleFunc("/retrieve/", func(res http.ResponseWriter, req *http.Request) {
 		vars := mux.Vars(req)
 		res.Header().Set("Content-Type", "application/json")
 		verificacao := verificarCodigo(vars["nameog"])
@@ -33,24 +33,26 @@ func MetodoGet(router *mux.Router) {
 			fmt.Fprint(res, "Código inválido")
 		}
 
-	}).Methods("GET") //retorna URL original
+	}).Methods("GET").Queries("url", "{nameog}") //retorna URL original
 }
 
 func MetodoPost(router *mux.Router) {
-	router.HandleFunc("/send/{name}", func(res http.ResponseWriter, req *http.Request) {
+	router.HandleFunc("/send/", func(res http.ResponseWriter, req *http.Request) {
 		vars := mux.Vars(req)
 		res.Header().Set("Content-Type", "application/json")
 		//fmt.Fprint(res, vars, vars["name"])
 		//res.WriteHeader(http.StatusOK)
 		longURL := vars["name"]
 		verificacao := verificarURL(longURL)
+		// valid := validation.Validate(longURL, validation.Required, validation.Length(5, 100), is.URL)
+		// log.Println(valid, longURL)
 		if verificacao {
 			fmt.Fprint(res, URLPost(longURL))
 		} else {
 			fmt.Fprint(res, "URL inválida")
 		}
 		//URLPost(longURL)
-	}).Methods("POST") //retorna URL encurtada
+	}).Methods("POST").Queries("url", "{name}")
 }
 
 func Servidor() {
