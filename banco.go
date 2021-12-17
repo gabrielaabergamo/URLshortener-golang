@@ -87,7 +87,6 @@ func buscarURLCurta(ShortURL string) Url {
 	for rows.Next() {
 		rows.Scan(&u.ID, &u.OriginalURL, &u.ShortURL, &u.CodigoSURL)
 	}
-	log.Println(u)
 	return u
 }
 
