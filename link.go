@@ -24,17 +24,6 @@ type Url struct {
 //função executada no método POST: checamos no banco de dados se tal URL já existe e caso contrário a adicionamos
 func URLPost(url string) string {
 	start := time.Now()
-
-	// achou := buscarURL(url) //busca no bd
-
-	// //caso url já tenha sido inserida
-	// if achou.ID != "" {
-	// 	achou.ProcessedAt = start
-	// 	achou.Duration = time.Since(start)
-	// 	return TransfJson(achou)
-	// }
-
-	//caso não tenha sido inserida ainda
 	ID, OriginalURL, ShortURL, CodigoSURL := URLCurta(url)
 	aux, err := inserirURL(ID, OriginalURL, ShortURL, CodigoSURL) //add no bd
 	if err != nil {
@@ -57,16 +46,24 @@ func URLCurta(txt string) (string, string, string, string) {
 
 	OriginalURL := txt
 
-	CodigoSURL := uniuri.NewLen(6) //gerar código da URL encurtada único
+	CodigoSURL := GeradorCodigo() //gerar código da URL encurtada único
 	verificacao := verificarCodigoBD(CodigoSURL)
 	for len(verificacao) > 0 {
-		CodigoSURL = uniuri.NewLen(6)
+		CodigoSURL = GeradorCodigo()
 		verificacao = verificarCodigoBD(CodigoSURL)
 	}
 
-	ShortURL := "http://go.io/" + CodigoSURL
+	ShortURL := GeradorURL(CodigoSURL)
 
 	return ID, OriginalURL, ShortURL, CodigoSURL
+}
+
+func GeradorCodigo() string {
+	return uniuri.NewLen(6)
+}
+
+func GeradorURL(CodigoSURL string) string {
+	return ("http://go.io/" + CodigoSURL)
 }
 
 //função executada no método GET: checamos em listURL qual struct desejamos retornar
@@ -91,7 +88,7 @@ func URLGet(url string) string {
 func TransfJson(aux Url) string {
 	auxjson, err := json.Marshal(aux)
 	if err != nil {
-		fmt.Println("erro", err)
+		fmt.Println("erro: não foi possível transformar a struct em JSON", err)
 	}
 	return string(auxjson)
 }
