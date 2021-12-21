@@ -44,6 +44,21 @@ func TestUrl(t *testing.T) {
 	assert.Equal(aux, "http://go.io/abs67D", "Expected 'http://go.io/abs67D', got 'http://go.io/abs67D'")
 }
 
-func TestTeste(t *testing.T) {
-	assert.True(t, true, "True is true!")
+func TestJSON(t *testing.T) {
+	aux := Url{
+		ID:          "teste",
+		OriginalURL: "teste",
+		ShortURL:    "teste",
+	}
+
+	auxjson := `{"ID":"teste","ProcessedAt":"0001-01-01T00:00:00Z","Duration":0,"OriginalURL":"teste","ShortURL":"teste"}`
+
+	auxfunc := TransfJson(aux)
+
+	assert := assert.New(t)
+	assert.Equal(auxfunc, auxjson, "Success")
 }
+
+// func TestTeste(t *testing.T) {
+// 	assert.True(t, true, "True is true!")
+// }
