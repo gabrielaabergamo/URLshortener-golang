@@ -1,6 +1,19 @@
 package main
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
+
+func TestUUID(t *testing.T) {
+	aux := GeradorUUID()
+
+	if reflect.TypeOf(aux).String() != "uuid.UUID" {
+		t.Errorf("GeradorUUID() failed, expected type uuid.UUID, got %v", reflect.TypeOf(aux).String())
+	} else {
+		t.Logf("GeradorUUID() success, expected type uuid.UUID, got %v", reflect.TypeOf(aux).String())
+	}
+}
 
 func TestCodigo(t *testing.T) {
 	aux := GeradorCodigo()

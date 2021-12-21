@@ -42,7 +42,7 @@ func URLPost(url string) string {
 
 //função que encurta a URL
 func URLCurta(txt string) (string, string, string, string) {
-	ID := uuid.NewV4().String() //gerar ID único
+	ID := GeradorUUID().String() //gerar ID único
 
 	OriginalURL := txt
 
@@ -56,6 +56,10 @@ func URLCurta(txt string) (string, string, string, string) {
 	ShortURL := GeradorURL(CodigoSURL)
 
 	return ID, OriginalURL, ShortURL, CodigoSURL
+}
+
+func GeradorUUID() uuid.UUID {
+	return uuid.NewV4()
 }
 
 func GeradorCodigo() string {
